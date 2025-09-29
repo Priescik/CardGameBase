@@ -40,3 +40,6 @@ MonoBehaviour:
       type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
       data:
         _drawAmount: 2
+    - rid: 9200962324747255877
+      type: {class: NoTM, ns: , asm: Assembly-CSharp}
+      data: 

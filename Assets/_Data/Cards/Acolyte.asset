@@ -36,6 +36,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 9200962342632292441
       type: {class: CreateEntityEffect, ns: , asm: Assembly-CSharp}
       data: 
