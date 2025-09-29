@@ -1,0 +1,7 @@
+Possible:
+null check in IHasTarget GAs like DestroyEntityGA
+
+Known:
+
+
+// Fixed:
