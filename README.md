@@ -7,8 +7,8 @@ As a jump-start I used following tutorial serie: https://www.youtube.com/watch?v
 As said tutorial is designed specifically for single-player asymetrical roguelike deckbuilding game, many changes were made to make it more generalized, and many new functionalities were added with even more to come.
 
 ## Used packages:
-Serialized Reference Editor
-DOTween
+- Serialized Reference Editor
+- DOTween
 
 ## Features:
 *TODO*
