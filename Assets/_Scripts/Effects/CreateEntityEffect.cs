@@ -6,8 +6,10 @@ using System;
 
 public class CreateEntityEffect : ManualTargetEffect
 {
-    public override bool IsValidTarget(EntityView target) => target is EmptyEntityView;
-    public override Type GetValidType => typeof(EmptyEntityView); // debug purposes
+    [SerializeField]
+    [AllowedEntityTargetTypes(EntityTargetType.Empty)]
+    EntityTargetType _allowedTargetType;
+    protected override EntityTargetType AllowedTargetType => _allowedTargetType;
 
     public override GameAction GetGameAction(CardInstance cardSource, EntityView entitySource, List<EntityView> targets)
     {

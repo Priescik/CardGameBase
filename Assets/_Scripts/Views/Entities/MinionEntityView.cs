@@ -14,8 +14,9 @@ public class MinionEntityView : EntityView, IDamagable
 
     List<PassiveSkillModel> _passives;
 
-    public override void Setup(CardInstance cardInstance)
+    public override void Setup(CardInstance cardInstance, Side side)
     {
+        Side = side;
         _cardInstance = cardInstance;
         _passives = new();
         foreach (PassiveSkillData skillData in _cardInstance.PassivesData)
@@ -72,11 +73,11 @@ public class MinionEntityView : EntityView, IDamagable
 
     void OnDestroy()
     {
-        CardViewHoverSystem.Instance.HideEntity();
         foreach (PassiveSkillModel skill in _passives)
         {
            // TODO test if they unsub correctly
             skill.OnRemove();
         }
+        CardViewHoverSystem.Instance.HideEntity(); // TODO only if this entity is being shown
     }
 }

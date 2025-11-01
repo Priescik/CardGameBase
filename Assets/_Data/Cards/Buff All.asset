@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b10d6d622d482044e9cfb79e0db49887, type: 3}
   m_Name: Buff All
   m_EditorClassIdentifier: 
-  <CardName>k__BackingField: Buff All
-  <Description>k__BackingField: Buff all minions by 1/1/1
+  <CardName>k__BackingField: Buff Your Minions
+  <Description>k__BackingField: Buff all your minions by 1/1/1
   <CardType>k__BackingField: 1
   <Cost>k__BackingField: 1
   <Stat1>k__BackingField: 0
@@ -22,10 +22,28 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: -2
-  <AutoTargetEffects>k__BackingField: []
+  <AutoTargetEffects>k__BackingField:
+  - <Effect>k__BackingField:
+      rid: 1355112465794859105
+    _targetMode:
+      _use: 1
+      _filterSide: 1
+      _side: 4
+      _filterType: 1
+      _type: 2
+      _random: 0
+      _randomCount: 1
+      _otherConditions: 0
   <PassivesData>k__BackingField: []
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 1355112465794859105
+      type: {class: ChangeStatsEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _allowedTargetType: 2
+        _stat1Change: 1
+        _stat2Change: 1
+        _stat3Change: 1

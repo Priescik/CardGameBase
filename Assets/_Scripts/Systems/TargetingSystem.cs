@@ -18,9 +18,16 @@ public class TargetingSystem : Singleton<TargetingSystem>
         _arrowView.gameObject.SetActive(true);
         _arrowView.SetupArrow(startPosition);
     }
-    public EntityView EndTargeting(Vector3 endPosition)
+
+    /// <summary>
+    /// Returns entityView hit by raycast under endPosition, without ending the animation.
+    /// 
+    /// This might be used while Targeting is ongoing and before it's end.
+    /// </summary>
+    /// <param name="endPosition">Coordinates there the mouse (or pointer) is</param>
+    /// <returns></returns>
+    public EntityView GetTarget(Vector3 endPosition)
     {
-        _arrowView.gameObject.SetActive(false);
         if (Physics.Raycast(endPosition, Vector3.down, out RaycastHit hit, 10f, _targetLayerMask)
             && hit.collider != null
             && hit.transform.TryGetComponent(out EntityView entityView))
@@ -28,5 +35,15 @@ public class TargetingSystem : Singleton<TargetingSystem>
             return entityView;
         }
         return null;
+    }
+    /// <summary>
+    /// Ends animation and returns entityView hit by raycast under endPosition
+    /// </summary>
+    /// <param name="endPosition">Coordinates there the mouse (or pointer) is</param>
+    /// <returns></returns>
+    public EntityView EndTargeting(Vector3 endPosition)
+    {
+        _arrowView.gameObject.SetActive(false);
+        return GetTarget(endPosition);
     }
 }

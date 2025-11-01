@@ -54,16 +54,16 @@ public class CardView : MonoBehaviour
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
 
-        if (CardInstance.ManualTargetEffect != null)
+        if (CardInstance.UsesManualTarget)
         {
             TargetingSystem.Instance.StartTargeting(transform.position);
+            HighlightingSystem.Instance.TurnOnPossibleTargets(CardInstance.ManualTargetEffect);
         }
         else
         {
             Interactions.Instance.PlayerIsDragging = true;
             _wrapper.SetActive(true);
             CardViewHoverSystem.Instance.Hide();
-            //SetVisibilityLayer("Default");
             _dragStartPosition = transform.position;
             _dragStartRotation = transform.rotation;
             Vector3 lookDirection = transform.position - Camera.main.transform.position;
@@ -71,15 +71,26 @@ public class CardView : MonoBehaviour
             transform.position = MouseRaycastSystem.Instance.GetMouseOnPlane();
             transform.rotation = Quaternion.LookRotation(lookDirection);
         }
-
     }
 
     void OnMouseDrag()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
-        if (CardInstance.ManualTargetEffect != null) return;
-        // TODO this should probably trigger non-play OnMouseUp effect, just in case the CanInteract turns off while dragging
-        transform.position = MouseRaycastSystem.Instance.GetMouseOnPlane();
+        if (CardInstance.UsesManualTarget)
+        {
+            // this ensures that anything under mouse is turned back to basic highlight
+            // TODO store changed highlight and revert this one only
+            HighlightingSystem.Instance.TurnOnPossibleTargets(CardInstance.ManualTargetEffect); 
+            EntityView target = TargetingSystem.Instance.GetTarget(MouseRaycastSystem.Instance.GetMouseOnPlane());
+            if (target != null)
+            {
+                HighlightingSystem.Instance.TurnOnMouseTarget(target, CardInstance.ManualTargetEffect.IsValidTarget(target));
+            }
+        }
+        else
+        {
+            transform.position = MouseRaycastSystem.Instance.GetMouseOnPlane();
+        }
     }
 
     void OnMouseUp()
@@ -88,8 +99,9 @@ public class CardView : MonoBehaviour
 
         //LayerMask rayLayer = CardInstance.RequiresTargetEntity() ? _basicDropLayerMask : _targetedDropLayerMask;
 
-        if (CardInstance.ManualTargetEffect != null)
+        if (CardInstance.UsesManualTarget)
         {
+            HighlightingSystem.Instance.TurnOffAll();
             if (!ManaSystem.Instance.HasEnoughMana(CardInstance.Cost))
             {
                 Debug.Log("Not enough Mana!"); // TODO game view cue
@@ -103,7 +115,7 @@ public class CardView : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Wrong target. Correct target is: {CardInstance.ManualTargetEffect.GetValidType}");
+                Debug.Log($"Wrong target. Correct target is/are: {CardInstance.ManualTargetEffect.GetValidType}");
                 return;
             }
         }

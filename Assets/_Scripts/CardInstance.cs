@@ -26,4 +26,6 @@ public class CardInstance
         Stat2 = cardTemplate.Stat2;
         Stat3 = cardTemplate.Stat3;
     }
+
+    public bool UsesManualTarget => this.ManualTargetEffect != null;
 }

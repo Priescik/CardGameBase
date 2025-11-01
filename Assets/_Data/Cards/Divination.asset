@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b10d6d622d482044e9cfb79e0db49887, type: 3}
-  m_Name: Draw
+  m_Name: Divination
   m_EditorClassIdentifier: 
-  <CardName>k__BackingField: Drawer
+  <CardName>k__BackingField: Divination
   <Description>k__BackingField: Draw 2 cards.
   <CardType>k__BackingField: 1
   <Cost>k__BackingField: 1
   <Stat1>k__BackingField: 0
   <Stat2>k__BackingField: 0
   <Stat3>k__BackingField: 0
-  <Image>k__BackingField: {fileID: 0}
+  <Image>k__BackingField: {fileID: 21300000, guid: bd93cd26c468ec1489bfbe37c86ab3cd, type: 3}
   <ManualTargetEffect>k__BackingField:
     rid: -2
   <AutoTargetEffects>k__BackingField:
-  - <TargetMode>k__BackingField:
-      rid: 9200962457271271586
-    <Effect>k__BackingField:
+  - <Effect>k__BackingField:
       rid: 9200962457271271587
+    <TargetMode>k__BackingField:
+      rid: 9200962457271271586
   <PassivesData>k__BackingField: []
   references:
     version: 2
@@ -40,6 +40,3 @@ MonoBehaviour:
       type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
       data:
         _drawAmount: 2
-    - rid: 9200962324747255877
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 

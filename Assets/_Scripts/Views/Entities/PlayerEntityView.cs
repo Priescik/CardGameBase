@@ -4,29 +4,25 @@ using System.Collections.Generic;
 
 public class PlayerEntityView : EntityView, IDamagable
 {
-    
+    [SerializeField] TMP_Text _healthText;
     int _currentHealth;
     
-    
-
-    
-
-    public override void Setup()
+    public override void Setup(CardInstance cardInstance, Side side)
     {
-        
-        _spriteRenderer.sprite = _cardInstance.Image;
+        Side = side;
+        _spriteRenderer.sprite = cardInstance.Image;
         RefreshView();
     }
 
     private void RefreshView()
     {
-        _statText_3.text = _currentHealth.ToString() + "/" + _cardInstance.Stat3.ToString();
+        _healthText.text = _currentHealth.ToString();
         //_spriteRenderer.sprite = _cardInstance.Image; // may be obsolete
     }
 
     public void OnMouseEnter()
     {
-        if (!Interactions.Instance.PlayerCanHover()) return;
+        //if (!Interactions.Instance.PlayerCanHover()) return;
         //CardViewHoverSystem.Instance.ShowEntity(_cardInstance);
     }
     public void OnMouseExit()
@@ -36,25 +32,13 @@ public class PlayerEntityView : EntityView, IDamagable
     }
 
 
+    ///
+    /// Returns bool if damage was fatal
+    /// 
     public bool TakeDamage(int amount)
     {
-        ///
-        /// Returns bool if damage was fatal
-        /// 
         _currentHealth -= amount;
         RefreshView();
         return _currentHealth <= 0;
-    }
-
-
-
-    void OnDestroy()
-    {
-        CardViewHoverSystem.Instance.HideEntity();
-        foreach (PassiveSkillModel skill in _passives)
-        {
-           // TODO test if they unsub correctly
-            skill.OnRemove();
-        }
     }
 }

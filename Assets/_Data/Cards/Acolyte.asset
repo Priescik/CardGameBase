@@ -25,29 +25,38 @@ MonoBehaviour:
   <AutoTargetEffects>k__BackingField: []
   <PassivesData>k__BackingField:
   - <TriggerCondition>k__BackingField:
-      rid: 9200962457271271547
+      rid: 1355112350924406882
     <AutoTargetEffect>k__BackingField:
-      <TargetMode>k__BackingField:
-        rid: 9200962457271271550
       <Effect>k__BackingField:
         rid: 9200962457271271551
-    <UseActionSourceAsTarget>k__BackingField: 0
-    <UseActionTargetAsTarget>k__BackingField: 0
+      _targetMode:
+        _filterSide: 0
+        _side: 2
+        _filterType: 0
+        _type: 0
+        _random: 0
+        _randomCount: 1
+        _otherConditions: 0
+    <AddActionSourceAsTarget>k__BackingField: 0
+    <AddActionTargetAsTarget>k__BackingField: 0
+    <AddPassiveOwnerAsTarget>k__BackingField: 0
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 9200962342632292441
-      type: {class: CreateEntityEffect, ns: , asm: Assembly-CSharp}
-      data: 
-    - rid: 9200962457271271547
-      type: {class: OnDamageTakenTC, ns: , asm: Assembly-CSharp}
+    - rid: 1355112350924406882
+      type: {class: OnDamageDealtTC, ns: , asm: Assembly-CSharp}
       data:
         ReactionTiming: 1
-    - rid: 9200962457271271550
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
+        SubConditions:
+        - rid: 1355112495154200684
+    - rid: 1355112495154200684
+      type: {class: isTheTargetC, ns: , asm: Assembly-CSharp}
+      data:
+        InvertCheck: 0
+    - rid: 9200962342632292441
+      type: {class: CreateEntityEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _allowedTargetType: 0
     - rid: 9200962457271271551
       type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
       data:

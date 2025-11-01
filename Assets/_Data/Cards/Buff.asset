@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CardName>k__BackingField: Buff
   <Description>k__BackingField: Target minion gains +1/+1
+  <CardType>k__BackingField: 1
   <Cost>k__BackingField: 1
   <Stat1>k__BackingField: 0
   <Stat2>k__BackingField: 0
@@ -21,14 +22,15 @@ MonoBehaviour:
   <Image>k__BackingField: {fileID: 0}
   <ManualTargetEffect>k__BackingField:
     rid: 9200962432167313408
-  <OtherEffects>k__BackingField: []
-  <CardType>k__BackingField: 1
+  <AutoTargetEffects>k__BackingField: []
+  <PassivesData>k__BackingField: []
   references:
     version: 2
     RefIds:
     - rid: 9200962432167313408
       type: {class: ChangeStatsEffect, ns: , asm: Assembly-CSharp}
       data:
+        _allowedTargetType: 2
         _stat1Change: 1
         _stat2Change: 1
         _stat3Change: 1

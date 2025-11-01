@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Interactions : Singleton<Interactions>
 {
-    public bool PlayerIsDragging { get; set; } = false;
+    public bool PlayerIsDragging { get; set; } = false; // TODO refactor
     public bool PlayerCanInteract()
     {
         if (!ActionSystem.Instance.IsPerforming) return true;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -13,33 +14,62 @@ public class BoardFieldsGizmo : MonoBehaviour
     [Tooltip("Spacing between fields in Z axis")]
     [SerializeField] float _spacingZ = 2f;
 
-    public Color gizmoColor = Color.cyan;
+    [SerializeField] bool _splitVertically;
+
     public float gizmoRadius = 0.3f;
 
     /// <summary>
     /// Returns an array of world positions for all fields.
     /// </summary>
-    public Vector3[] GetFieldPositions()
+    //public Vector3[] GetFieldPositions()
+    public (List<Vector3> worldPositions, List<Vector3> localPositions) GetFieldPositions()
     {
-        Vector3[] positions = new Vector3[_rows * _columns];
-        int index = 0;
+        var positionsA = new List<Vector3>();
+        var positionsB = new List<Vector3>();
 
         for (int r = 0; r < _rows; r++)
         {
             for (int c = 0; c < _columns; c++)
             {
                 Vector3 localPos = new Vector3((c-(_columns-1)/2f) * _spacingX, 0, (r-(_rows-1)/2f) * _spacingZ);
-                positions[index++] = transform.TransformPoint(localPos);
+                if (_splitVertically)
+                {
+                    if (localPos.x < 0)
+                    {
+                        positionsA.Add(transform.TransformPoint(localPos));
+                    }
+                    else
+                    {
+                        positionsB.Add(transform.TransformPoint(localPos));
+                    }
+                }
+                else
+                {
+                    if (localPos.z < 0)
+                    {
+                        positionsA.Add(transform.TransformPoint(localPos));
+                    }
+                    else
+                    {
+                        positionsB.Add(transform.TransformPoint(localPos));
+                    }
+                }
             }
         }
 
-        return positions;
+        return (positionsA, positionsB);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = gizmoColor;
-        foreach (var pos in GetFieldPositions())
+        (List<Vector3> sideA, List<Vector3> sideB) = GetFieldPositions();
+        Gizmos.color = Color.blue;
+        foreach (var pos in sideA)
+        {
+            Gizmos.DrawSphere(pos, gizmoRadius);
+        }
+        Gizmos.color = Color.red;
+        foreach (var pos in sideB)
         {
             Gizmos.DrawSphere(pos, gizmoRadius);
         }

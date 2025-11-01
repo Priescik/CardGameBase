@@ -11,15 +11,4 @@ public class OnDamageTakenTC : TriggerCondition
     {
         ActionSystem.UnsubscribeReaction<DealDamageGA>(reaction, ReactionTiming);
     }
-    public override bool SubConditionIsMet(EntityView skillOwnerEntity, GameAction gameAction)
-    {
-        // if target is this
-        if (gameAction is DealDamageGA dealDamageGA 
-            && dealDamageGA.Targets.Contains(skillOwnerEntity))
-        {
-            return true;
-        }
-        return false;
-        
-    }
 }

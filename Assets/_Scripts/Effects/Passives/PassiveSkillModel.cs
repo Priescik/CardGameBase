@@ -31,17 +31,21 @@ public class PassiveSkillModel
         if (_condition.SubConditionIsMet(_owner, gameAction))
         {
             List<EntityView> targets = new();
-            if (_data.UseActionSourceAsTarget && gameAction is IHasEntitySource actionWithSource)
+            if (_data.AddActionSourceAsTarget && gameAction is IHasEntitySource actionWithSource)
             {
                 targets.Add(actionWithSource.EntitySource);
             }
-            if (_data.UseActionTargetAsTarget && gameAction is IHasTargets actionWithTarget) // && //*has target* gameAction is IHasEntitySource entitySource)
+            if (_data.AddActionTargetAsTarget && gameAction is IHasTargets actionWithTarget) // && //*has target* gameAction is IHasEntitySource entitySource)
             {
                 targets.AddRange(actionWithTarget.Targets);
             }
-            if (_effect.TargetMode.GetTargets() != null)
+            if (_data.AddPassiveOwnerAsTarget)
             {
-                targets.AddRange(_effect.TargetMode.GetTargets()); 
+                targets.Add(_owner);
+            }
+            if (_effect.TargetMode.GetTargets(_owner.Side) != null)
+            {
+                targets.AddRange(_effect.TargetMode.GetTargets(_owner.Side)); 
             }
             GameAction passiveSkillEffectAction = _effect.Effect.GetGameAction(null, _owner, targets); // TODO pass cardSource:_owner._cardInstance?
             ActionSystem.Instance.AddReaction(passiveSkillEffectAction);

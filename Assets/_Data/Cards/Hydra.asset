@@ -27,28 +27,40 @@ MonoBehaviour:
   - <TriggerCondition>k__BackingField:
       rid: 9200962457271271566
     <AutoTargetEffect>k__BackingField:
-      <TargetMode>k__BackingField:
-        rid: 9200962457271271567
       <Effect>k__BackingField:
         rid: 9200962457271271568
-    <UseActionSourceAsTarget>k__BackingField: 0
-    <UseActionTargetAsTarget>k__BackingField: 1
+      _targetMode:
+        _filterSide: 0
+        _side: 2
+        _filterType: 0
+        _type: 1
+        _random: 0
+        _randomCount: 1
+        _otherConditions: 0
+    <AddActionSourceAsTarget>k__BackingField: 0
+    <AddActionTargetAsTarget>k__BackingField: 0
+    <AddPassiveOwnerAsTarget>k__BackingField: 0
   references:
     version: 2
     RefIds:
+    - rid: 1355112495154200685
+      type: {class: isTheTargetC, ns: , asm: Assembly-CSharp}
+      data:
+        InvertCheck: 0
     - rid: 9200962457271271565
       type: {class: CreateEntityEffect, ns: , asm: Assembly-CSharp}
-      data: 
+      data:
+        _allowedTargetType: 0
     - rid: 9200962457271271566
       type: {class: OnDamageTakenTC, ns: , asm: Assembly-CSharp}
       data:
         ReactionTiming: 1
-    - rid: 9200962457271271567
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
+        SubConditions:
+        - rid: 1355112495154200685
     - rid: 9200962457271271568
       type: {class: ChangeStatsEffect, ns: , asm: Assembly-CSharp}
       data:
+        _allowedTargetType: 2
         _stat1Change: 2
         _stat2Change: 0
         _stat3Change: 2

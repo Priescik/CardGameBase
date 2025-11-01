@@ -14,6 +14,9 @@ public class CardSystem : Singleton<CardSystem>
     public int DiscardPileCount => _discardPile.Count;
     List<CardInstance> _hand = new();
 
+    // TODO differentiate players!!!
+    Side _side = Side.A;
+
     void OnEnable()
     {
         ActionSystem.AttachPerformer<DrawCardsGA>(DrawCardsPerformer);
@@ -73,7 +76,7 @@ public class CardSystem : Singleton<CardSystem>
         }
         foreach (var effectWrapper in playCardGA.CardInstance.AutoTargetEffects)
         {
-            List<EntityView> targets = effectWrapper.TargetMode.GetTargets();
+            List<EntityView> targets = effectWrapper.TargetMode.GetTargets(_side);
             PerformEffectGA performEffectGA = new(playCardGA.CardInstance, null, effectWrapper.Effect, targets);
             ActionSystem.Instance.AddReaction(performEffectGA);
             // We use Reaction here, because another performer is already running (PlayCardGA)

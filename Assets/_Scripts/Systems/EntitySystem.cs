@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class EntitySystem : Singleton<EntitySystem>
 {
@@ -16,7 +17,6 @@ public class EntitySystem : Singleton<EntitySystem>
     Dictionary<int, EntityView> _hiddenEmptyEntities = new();
 
     public List<EntityView> All => _entities;
-    //public List<EntityView> All => _entities;
 
     void OnEnable()
     {
@@ -37,7 +37,7 @@ public class EntitySystem : Singleton<EntitySystem>
     {
         EntityView target = createEntityGA.TargetEntity;
         var newEntity = Instantiate(_minionEntityViewPrefab, target.transform.position, target.transform.rotation); // TODO generalize and automate prefab selection
-        newEntity.Setup(createEntityGA.CardInstance);
+        newEntity.Setup(createEntityGA.CardInstance, Side.A);
 
         createEntityGA.TargetEntity = newEntity;
 
@@ -58,9 +58,17 @@ public class EntitySystem : Singleton<EntitySystem>
 
     public void InitializeEmptyEntities()
     {
-        foreach (Vector3 pos in _boardFieldsGizmo.GetFieldPositions())
+        (List<Vector3> sideA, List<Vector3> sideB) = _boardFieldsGizmo.GetFieldPositions();
+        foreach (Vector3 pos in sideA)
         {
             EntityView newEntity = Instantiate(_emptyEntityViewPrefab, pos, Quaternion.Euler(90,0,0));
+            newEntity.Setup(null, Side.A);
+            _entities.Add(newEntity);
+        }
+        foreach (Vector3 pos in sideB)
+        {
+            EntityView newEntity = Instantiate(_emptyEntityViewPrefab, pos, Quaternion.Euler(90, 0, 0));
+            newEntity.Setup(null, Side.B);
             _entities.Add(newEntity);
         }
     }
