@@ -1,21 +1,22 @@
 ### *Work in progress*
-## Purpose
+# Purpose
 The goal of this project is to create a solid basic structure for various card game designs, while following most fitting programming patterns to keep it readible and adaptable to more specific projects.
 
 As a jump-start I used following tutorial serie: https://www.youtube.com/watch?v=rgsp9pb0Oi0
 
 As said tutorial is designed specifically for single-player asymetrical roguelike deckbuilding game, many changes were made to make it more generalized, and many new functionalities were added with even more to come.
 
-## Used packages:
+# Used packages:
 - [Serialize Reference Editor](https://assetstore.unity.com/packages/tools/utilities/serialize-reference-editor-297559)
-- DOTween
+- [DOTween](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
 
-## Features:
-### Category : Editor
-Battlefield placement gizmo - allows quick changes to battlefield layout, using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
+# Features:
+## Category : Editor
+### Battlefield placement gizmo
+Allows quick changes to battlefield layout, using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
 ![BFgizmo2](https://github.com/user-attachments/assets/ad4220bd-037e-4e53-a178-29a9c214ecb4)
 
-Simplified, easier to use inspectors (via Serialize Reference Editor) 
+### Simplified, easier to use inspectors (via Serialize Reference Editor) 
 
 <table border="0">
  <tr>
