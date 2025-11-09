@@ -7,10 +7,27 @@ As a jump-start I used following tutorial serie: https://www.youtube.com/watch?v
 As said tutorial is designed specifically for single-player asymetrical roguelike deckbuilding game, many changes were made to make it more generalized, and many new functionalities were added with even more to come.
 
 ## Used packages:
-- Serialized Reference Editor
+- [Serialize Reference Editor](https://assetstore.unity.com/packages/tools/utilities/serialize-reference-editor-297559)
 - DOTween
 
 ## Features:
-*TODO*
+### Category : Editor
+Battlefield placement gizmo - allows quick changes to battlefield layout, using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
+![BFgizmo2](https://github.com/user-attachments/assets/1ef1be21-899b-41c1-9b9b-b540aa6029e3)
 
+Simplified, easier to use inspectors (via Serialize Reference Editor) 
 
+<table border="0">
+ <tr>
+    <td><b style="font-size:30px">Defualt</b></td>
+    <td><b style="font-size:30px">Custom</b></td>
+ </tr>
+ <tr>
+    <td>
+      <img width="512" height="178" alt="image" src="https://github.com/user-attachments/assets/e07f5f22-50ed-49d2-b450-c99f046c3833" />
+    </td>
+    <td>
+      <img width="501" height="119" alt="image" src="https://github.com/user-attachments/assets/0bc9030e-e713-488c-ac4a-36c6fe609199" />
+    </td>
+ </tr>
+</table>
