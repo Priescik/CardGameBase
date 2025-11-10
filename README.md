@@ -14,6 +14,7 @@ As said tutorial is designed specifically for single-player asymetrical roguelik
 ## Category : Editor
 ### Battlefield placement gizmo
 Allows quick changes to battlefield layout, using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
+
 ![BFgizmo2](https://github.com/user-attachments/assets/ad4220bd-037e-4e53-a178-29a9c214ecb4)
 
 ### Simplified, easier to use inspectors (via Serialize Reference Editor) 
