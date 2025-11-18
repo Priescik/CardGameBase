@@ -7,6 +7,7 @@ public class CardSystem : Singleton<CardSystem>
 {
     [SerializeField] HandView _handView;
     [SerializeField] Transform _discardPilePoint;
+    [SerializeField] Transform _drawPilePoint;
     //---
     List<CardInstance> _drawPile = new();
     public int DrawPileCount => _drawPile.Count;
@@ -55,7 +56,7 @@ public class CardSystem : Singleton<CardSystem>
         foreach (var card in _hand)
         {
             CardView cardView = _handView.RemoveCard(card);
-            yield return DiscardCard(cardView);
+            yield return MoveCardToDiscard(cardView);
         }
         _hand.Clear();
     }
@@ -64,40 +65,39 @@ public class CardSystem : Singleton<CardSystem>
     {
         _hand.Remove(playCardGA.CardInstance);
         CardView cardView = _handView.RemoveCard(playCardGA.CardInstance);
-        yield return DiscardCard(cardView);
+        yield return MoveCardToDiscard(cardView);
 
         SpendManaGA spendManaGA = new(playCardGA.CardInstance.Cost);
         ActionSystem.Instance.AddReaction(spendManaGA);
 
         if (playCardGA.CardInstance.ManualTargetEffect != null)
         {
-            PerformEffectGA performEffectGA = new(playCardGA.CardInstance, null, playCardGA.CardInstance.ManualTargetEffect, new() { playCardGA.ManualTarget });
+            PerformCardEffectGA performEffectGA = new(playCardGA.CardInstance, playCardGA.CardInstance.ManualTargetEffect, new() { playCardGA.ManualTarget });
             ActionSystem.Instance.AddReaction(performEffectGA);
         }
         foreach (var effectWrapper in playCardGA.CardInstance.AutoTargetEffects)
         {
-            List<EntityView> targets = effectWrapper.TargetMode.GetTargets(_side);
-            PerformEffectGA performEffectGA = new(playCardGA.CardInstance, null, effectWrapper.Effect, targets);
+            PerformCardAutoTargetEffectGA performEffectGA = new(playCardGA.CardInstance, effectWrapper.Effect, effectWrapper.TargetMode, _side);
             ActionSystem.Instance.AddReaction(performEffectGA);
-            // We use Reaction here, because another performer is already running (PlayCardGA)
+            // Use Reaction here, because another performer is already running (PlayCardGA)
         }
     }
 
     void EnemyTurnPostReaction(EnemyTurnGA enemyTurnGA)
     {
         DrawCardsGA drawCardsGA = new(1);
-        ActionSystem.Instance.AddReaction(drawCardsGA); // TODO this seems like something that should be defined as turn structure
+        ActionSystem.Instance.AddReaction(drawCardsGA); // TODO should be defined as turn structure
     }
 
     IEnumerator DrawCard()
     {
         CardInstance cardInstance = _drawPile.Draw();
         _hand.Add(cardInstance);
-        CardView cardView = CardViewCreator.Instance.CreateCardView(cardInstance, transform.position, Quaternion.identity); //TODO spawnpoint, also _var doesn't look great here
+        CardView cardView = CardViewCreator.Instance.CreateCardView(cardInstance, _drawPilePoint.position, _drawPilePoint.rotation);
         yield return _handView.AddCard(cardView);
     }
 
-    IEnumerator DiscardCard(CardView cardView)
+    IEnumerator MoveCardToDiscard(CardView cardView)
     {
         _discardPile.Add(cardView.CardInstance);
         cardView.transform.DOScale(Vector3.zero, 0.15f);

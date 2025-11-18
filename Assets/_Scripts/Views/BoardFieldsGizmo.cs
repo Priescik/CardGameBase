@@ -21,7 +21,6 @@ public class BoardFieldsGizmo : MonoBehaviour
     /// <summary>
     /// Returns an array of world positions for all fields.
     /// </summary>
-    //public Vector3[] GetFieldPositions()
     public (List<Vector3> worldPositions, List<Vector3> localPositions) GetFieldPositions()
     {
         var positionsA = new List<Vector3>();

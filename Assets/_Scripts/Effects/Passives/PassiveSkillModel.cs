@@ -15,7 +15,6 @@ public class PassiveSkillModel
         _effect = _data.AutoTargetEffect;
         _owner = owner;
     }
-    //onadd onremove 1:27
     public void OnAdd()
     {
         _condition.SubscribeCondition(Reaction);
@@ -51,5 +50,4 @@ public class PassiveSkillModel
             ActionSystem.Instance.AddReaction(passiveSkillEffectAction);
         }
     }
-
 }

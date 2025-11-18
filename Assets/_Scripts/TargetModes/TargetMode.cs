@@ -18,6 +18,7 @@ public class TargetMode
     //[field: SerializeReference, SR] TargetCondition[] _conditions;
     public List<EntityView> GetTargets(Side sourceSide)
     {
+        Debug.Log("getTargets was called");
         List<EntityView> output = new();
         if (!_use) return output;
 
@@ -25,8 +26,8 @@ public class TargetMode
         foreach (var target in all)
         {
             //if (_filterSide && target.Side != sourceSide) continue;
-            if (_filterSide && SideSelector.Select(_side, sourceSide).Contains(target.Side)) continue;
-            if (_filterType && EntityTargetTypeMapper.IsAssignable(target.GetType(), _type)) continue;
+            if (_filterSide && !SideSelector.Select(_side, sourceSide).Contains(target.Side)) continue;
+            if (_filterType && !EntityTargetTypeMapper.IsAssignable(target.GetType(), _type)) continue;
             output.Add(target);
         }
         if (_random)

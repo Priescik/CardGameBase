@@ -19,9 +19,9 @@ MonoBehaviour:
   <Stat1>k__BackingField: 1
   <Stat2>k__BackingField: 0
   <Stat3>k__BackingField: 3
-  <Image>k__BackingField: {fileID: 0}
+  <Image>k__BackingField: {fileID: 21300000, guid: 2faad1f0d2ad9e543810fb27d6040cd9, type: 3}
   <ManualTargetEffect>k__BackingField:
-    rid: 9200962342632292441
+    rid: 6367499788085624908
   <AutoTargetEffects>k__BackingField: []
   <PassivesData>k__BackingField:
   - <TriggerCondition>k__BackingField:
@@ -30,6 +30,7 @@ MonoBehaviour:
       <Effect>k__BackingField:
         rid: 9200962457271271551
       _targetMode:
+        _use: 0
         _filterSide: 0
         _side: 2
         _filterType: 0
@@ -53,8 +54,8 @@ MonoBehaviour:
       type: {class: isTheTargetC, ns: , asm: Assembly-CSharp}
       data:
         InvertCheck: 0
-    - rid: 9200962342632292441
-      type: {class: CreateEntityEffect, ns: , asm: Assembly-CSharp}
+    - rid: 6367499788085624908
+      type: {class: CreateSelfEntityEffect, ns: , asm: Assembly-CSharp}
       data:
         _allowedTargetType: 0
     - rid: 9200962457271271551

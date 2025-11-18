@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: 
   <CardName>k__BackingField: Fireball
-  <Description>k__BackingField: Deal 5 damage to target.
+  <Description>k__BackingField: Deal 1 damage to target.
   <CardType>k__BackingField: 1
   <Cost>k__BackingField: 1
   <Stat1>k__BackingField: 0
@@ -31,4 +31,4 @@ MonoBehaviour:
       type: {class: DealDamageEffect, ns: , asm: Assembly-CSharp}
       data:
         _allowedTargetType: 3
-        _amount: 5
+        _amount: 1

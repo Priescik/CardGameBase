@@ -25,17 +25,21 @@ MonoBehaviour:
   <AutoTargetEffects>k__BackingField:
   - <Effect>k__BackingField:
       rid: 9200962457271271587
-    <TargetMode>k__BackingField:
-      rid: 9200962457271271586
+    _targetMode:
+      _use: 0
+      _filterSide: 0
+      _side: 2
+      _filterType: 0
+      _type: 0
+      _random: 0
+      _randomCount: 1
+      _otherConditions: 0
   <PassivesData>k__BackingField: []
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 9200962457271271586
-      type: {class: NoTM, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 9200962457271271587
       type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
       data:

@@ -948,6 +948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _handView: {fileID: 587585424}
   _discardPilePoint: {fileID: 545870960}
+  _drawPilePoint: {fileID: 1190693721}
 --- !u!1 &475951114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _splineContainer: {fileID: 1533710054}
   _maxCardSpacing: 0.15
+  _depthOffset: 0.05
 --- !u!4 &587585425
 Transform:
   m_ObjectHideFlags: 0
@@ -1267,16 +1269,14 @@ MonoBehaviour:
   _startingHandSize: 7
   _startingManaCapacity: 7
   _deckData:
-  - {fileID: 11400000, guid: dd1ddd302e1813048b8bb6ffa261b582, type: 2}
-  - {fileID: 11400000, guid: dd1ddd302e1813048b8bb6ffa261b582, type: 2}
-  - {fileID: 11400000, guid: 61e9aff2976935342b2004b5e0243275, type: 2}
+  - {fileID: 11400000, guid: 66a99951b7f4b0048b175a1563d15f20, type: 2}
+  - {fileID: 11400000, guid: bf7bf8775e47e4a47af208b66ae1a7b2, type: 2}
   - {fileID: 11400000, guid: 61e9aff2976935342b2004b5e0243275, type: 2}
   - {fileID: 11400000, guid: 6f1e0c3243180684bbe013dfe6077ce0, type: 2}
-  - {fileID: 11400000, guid: def3334ea68e209449259f9cc696ca03, type: 2}
   - {fileID: 11400000, guid: 3fa1262d8865f2841bf372f39e004e92, type: 2}
   - {fileID: 11400000, guid: d9e6df7a82c282145b264ee947e844ae, type: 2}
-  - {fileID: 11400000, guid: bf7bf8775e47e4a47af208b66ae1a7b2, type: 2}
-  - {fileID: 11400000, guid: bf7bf8775e47e4a47af208b66ae1a7b2, type: 2}
+  - {fileID: 11400000, guid: dd1ddd302e1813048b8bb6ffa261b582, type: 2}
+  - {fileID: 11400000, guid: def3334ea68e209449259f9cc696ca03, type: 2}
 --- !u!1 &771921742
 GameObject:
   m_ObjectHideFlags: 0
@@ -2939,8 +2939,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _columns: 6
   _rows: 2
-  _spacingX: 7.9
-  _spacingZ: 9
+  _spacingX: 8.81
+  _spacingZ: 7.22
   _splitVertically: 0
   gizmoRadius: 1
 --- !u!1 &1604325259

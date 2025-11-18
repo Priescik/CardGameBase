@@ -36,8 +36,13 @@ public class EntitySystem : Singleton<EntitySystem>
     IEnumerator CreateEntityPerformer(CreateEntityGA createEntityGA)
     {
         EntityView target = createEntityGA.TargetEntity;
+        if (!target)
+        {
+            Debug.Log("Create entity action fizzled (pecefully), cause: no target");
+            yield break;
+        }
         var newEntity = Instantiate(_minionEntityViewPrefab, target.transform.position, target.transform.rotation); // TODO generalize and automate prefab selection
-        newEntity.Setup(createEntityGA.CardInstance, Side.A);
+        newEntity.Setup(createEntityGA.CardInstance, target.Side);
 
         createEntityGA.TargetEntity = newEntity;
 
@@ -52,7 +57,7 @@ public class EntitySystem : Singleton<EntitySystem>
             Debug.LogWarning($"Entity {target} was not found in EntitySystem._entities");
         }
         target.gameObject.SetActive(false);
-
+        Debug.Log("Entity Created");
         yield return null; // TODO animation
     }
 
@@ -83,7 +88,7 @@ public class EntitySystem : Singleton<EntitySystem>
             }
             else if (!(target is EmptyEntityView))
             {
-                Debug.Log($"Cannot change stats of {target} entity");
+                Debug.LogWarning($"Cannot change stats of {target} entity");
                 // TODO handle non-minion targets (which shouldn't ever be the targets)
             }
         }
@@ -105,7 +110,7 @@ public class EntitySystem : Singleton<EntitySystem>
             else
             {
                 // TODO handle non-minion targets (which shouldn't ever be the targets)
-                Debug.Log($"target {target} is not damagable");
+                Debug.LogWarning($"target {target} is not damagable");
             }
         }
         yield return null;
