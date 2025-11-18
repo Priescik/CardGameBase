@@ -41,8 +41,9 @@ public class CardView : MonoBehaviour
     {
         if (!Interactions.Instance.PlayerCanHover()) return;
         _wrapper.SetActive(false);
-        Vector3 pos = transform.position + transform.localRotation * Vector3.up * 4;
-        CardViewHoverSystem.Instance.Show(CardInstance, pos, transform.rotation);
+        //Vector3 pos = transform.position + transform.localRotation * (Vector3.up * 6 + Vector3.back * 0.2f); 
+        // kept rotation requires edge cards to be displaced more for the corder to be visible and it looks odd
+        CardViewHoverSystem.Instance.Show(CardInstance, transform);
     }
     public void OnMouseExit()
     {

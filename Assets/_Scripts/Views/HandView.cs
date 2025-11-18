@@ -11,7 +11,7 @@ public class HandView : MonoBehaviour
     [SerializeField] SplineContainer _splineContainer;
     [SerializeField] float _maxCardSpacing;
     readonly List<CardView> _cards = new();
-    float _depthOffset = 0.01f;
+    [SerializeField] float _depthOffset = 0.01f;
 
     void Start()
     {
