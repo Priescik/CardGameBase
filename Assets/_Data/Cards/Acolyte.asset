@@ -28,7 +28,7 @@ MonoBehaviour:
       rid: 1355112350924406882
     <AutoTargetEffect>k__BackingField:
       <Effect>k__BackingField:
-        rid: 9200962457271271551
+        rid: 6367499856390914161
       _targetMode:
         _use: 0
         _filterSide: 0
@@ -49,16 +49,16 @@ MonoBehaviour:
       data:
         ReactionTiming: 1
         SubConditions:
-        - rid: 1355112495154200684
-    - rid: 1355112495154200684
-      type: {class: isTheTargetC, ns: , asm: Assembly-CSharp}
-      data:
-        InvertCheck: 0
+        - rid: 6367499856390914155
     - rid: 6367499788085624908
       type: {class: CreateSelfEntityEffect, ns: , asm: Assembly-CSharp}
       data:
         _allowedTargetType: 0
-    - rid: 9200962457271271551
+    - rid: 6367499856390914155
+      type: {class: isTheTargetC, ns: , asm: Assembly-CSharp}
+      data:
+        InvertCheck: 0
+    - rid: 6367499856390914161
       type: {class: DrawCardsEffect, ns: , asm: Assembly-CSharp}
       data:
         _drawAmount: 1

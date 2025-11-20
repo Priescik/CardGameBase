@@ -2938,7 +2938,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _columns: 6
-  _rows: 2
+  _rows: 4
   _spacingX: 8.81
   _spacingZ: 7.22
   _splitVertically: 0
