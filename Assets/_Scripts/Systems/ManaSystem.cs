@@ -6,7 +6,7 @@ public class ManaSystem : Singleton<ManaSystem>
     [SerializeField] ManaUI _manaUI;
     [SerializeField] ManaView _manaView;
 
-    int _manaCapacity = 0; //TODO move to config
+    int _manaCapacity = GameplayConfig.StartingMana;
     int _currentMana = 0;
 
     void OnEnable()
@@ -58,7 +58,7 @@ public class ManaSystem : Singleton<ManaSystem>
 
     void PostEnemyTurnManaRefillReaction(EnemyTurnGA enemyTurnGA)
     {
-        IncreaseManaCapGA increaseManaCapGA = new(1); //TODO config
+        IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.ManaGainPerTurn);
         ActionSystem.Instance.AddReaction(increaseManaCapGA);
         GainManaGA gainManaGA = new(0, true);
         ActionSystem.Instance.AddReaction(gainManaGA);

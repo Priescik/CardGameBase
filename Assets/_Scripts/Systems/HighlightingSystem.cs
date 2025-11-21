@@ -16,10 +16,16 @@ public class HighlightingSystem : Singleton<HighlightingSystem>
         _highlights.Remove(highlight);
     }
 
-    public void TurnOnPossibleTargets(ManualTargetEffect effect)
+    public void TurnOnValidCombatTargets(Side side)
     {
         foreach (TargetHighlight h in _highlights)
-            h.TurnOn();
+            h.TurnOn(); // TODO filter
+    }
+
+    public void TurnOnValidTargets(ManualTargetEffect effect)
+    {
+        foreach (TargetHighlight h in _highlights)
+            h.TurnOn(); // TODO filter
     }
 
     public void TurnOnMouseTarget(EntityView entity, bool isValid)

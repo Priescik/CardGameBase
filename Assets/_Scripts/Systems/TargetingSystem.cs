@@ -4,15 +4,7 @@ public class TargetingSystem : Singleton<TargetingSystem>
 {
     [SerializeField] ArrowView _arrowView;
     [SerializeField] LayerMask _targetLayerMask;
-    void Start()
-    {
-        
-    }
 
-    void Update()
-    {
-        
-    }
     public void StartTargeting(Vector3 startPosition)
     {
         _arrowView.gameObject.SetActive(true);

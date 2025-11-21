@@ -4,8 +4,6 @@ using System.Collections;
 
 public class MatchSetupSystem : MonoBehaviour
 {
-    [SerializeField] int _startingHandSize;
-    [SerializeField] int _startingManaCapacity;
     [SerializeField] List<CardTemplate> _deckData;
 
     void Start()
@@ -13,7 +11,6 @@ public class MatchSetupSystem : MonoBehaviour
         EntitySystem.Instance.InitializeEmptyEntities();
 
         CardSystem.Instance.SetupDrawPile(_deckData);
-        //DrawCardsGA drawCardsGA = new(5); // TODO move value to config
         //ActionSystem.Instance.Perform(drawCardsGA);
 
         //IncreaseManaCapGA increaseManaCapGA = new(1);
@@ -28,14 +25,14 @@ public class MatchSetupSystem : MonoBehaviour
         bool done = false;
 
         CardSystem.Instance.SetupDrawPile(_deckData);
-        DrawCardsGA drawCardsGA = new(_startingHandSize); // TODO move value to config
+        DrawCardsGA drawCardsGA = new(GameplayConfig.StartingHandSize);
         ActionSystem.Instance.Perform(drawCardsGA, () => done = true);
         yield return new WaitUntil(() => done);
 
         done = false;
         // This was added to run UI update, however it might
         // become a config-based setup in the future
-        IncreaseManaCapGA increaseManaCapGA = new(_startingManaCapacity);
+        IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.StartingMana);
         ActionSystem.Instance.Perform(increaseManaCapGA, () => done = true);
         yield return new WaitUntil(() => done);
 

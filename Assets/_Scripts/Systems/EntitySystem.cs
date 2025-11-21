@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 
 public class EntitySystem : Singleton<EntitySystem>
 {
@@ -24,6 +25,7 @@ public class EntitySystem : Singleton<EntitySystem>
         ActionSystem.AttachPerformer<ChangeStatsGA>(ChangeStatPerformer);
         ActionSystem.AttachPerformer<DealDamageGA>(DealDamagePerformer);
         ActionSystem.AttachPerformer<DestroyEntityGA>(DestroyEntityPerformer);
+        ActionSystem.AttachPerformer<AttackGA>(AttackPerformer);
     }
     void OnDisable()
     {
@@ -31,6 +33,7 @@ public class EntitySystem : Singleton<EntitySystem>
         ActionSystem.DetachPerformer<ChangeStatsGA>();
         ActionSystem.DetachPerformer<DealDamageGA>();
         ActionSystem.DetachPerformer<DestroyEntityGA>();
+        ActionSystem.DetachPerformer<AttackGA>();
     }
 
     IEnumerator CreateEntityPerformer(CreateEntityGA createEntityGA)
@@ -58,7 +61,7 @@ public class EntitySystem : Singleton<EntitySystem>
         }
         target.gameObject.SetActive(false);
         Debug.Log("Entity Created");
-        yield return null; // TODO animation
+        yield return null;
     }
 
     public void InitializeEmptyEntities()
@@ -86,10 +89,9 @@ public class EntitySystem : Singleton<EntitySystem>
             {
                 minion.ApplyStatChanges(changeStatsGA.Stat1Change, changeStatsGA.Stat2Change, changeStatsGA.Stat3Change);
             }
-            else if (!(target is EmptyEntityView))
+            else
             {
                 Debug.LogWarning($"Cannot change stats of {target} entity");
-                // TODO handle non-minion targets (which shouldn't ever be the targets)
             }
         }
         yield return null;
@@ -102,14 +104,12 @@ public class EntitySystem : Singleton<EntitySystem>
             if (target is IDamagable damagable) {
                 if (damagable.TakeDamage(dealDamageGA.Amount))
                 {
-                    //Destroy(target.gameObject); // TODO performer + GA
                     DestroyEntityGA destroyEntityGA = new(target);
                     ActionSystem.Instance.AddReaction(destroyEntityGA);
                 }
             }
             else
             {
-                // TODO handle non-minion targets (which shouldn't ever be the targets)
                 Debug.LogWarning($"target {target} is not damagable");
             }
         }
@@ -131,8 +131,38 @@ public class EntitySystem : Singleton<EntitySystem>
             {
                 Debug.LogWarning($"Entity {target} was not found in EntitySystem._entities");
             }
-            Destroy(target.gameObject); // TODO store and restore empty prefab in case of entity destruction
+            Destroy(target.gameObject);
         }
         yield return null;
+    }
+
+    IEnumerator AttackPerformer(AttackGA attackGA)
+    {
+        if (!(attackGA.EntitySource is MinionEntityView attacker)) yield break;
+        Vector3 returnPos = attacker.transform.position;
+        Quaternion returnRot = attacker.transform.rotation;
+        var seq = DOTween.Sequence();
+        foreach (EntityView target in attackGA.Targets)
+        {
+            // TODO consider delegating this movement to wrapper
+            seq.Append(
+                attacker.transform.DOMove(
+                    Vector3.Lerp(returnPos, target.transform.position, 0.9f),
+                    AnimConfig.AttackAnimTime
+                )
+            );
+            seq.AppendCallback(() =>
+            {
+                DealDamageGA dealDamageGA = new(attacker, attacker.Stat1, new() { target });
+                ActionSystem.Instance.AddReaction(dealDamageGA);
+                // TODO this isn't sensitive to to tagets that dont deal dmg (eg. players), Interface may me needed
+                DealDamageGA returnDamageGA = new(target, target.Stat1, new() { attacker }); 
+                ActionSystem.Instance.AddReaction(returnDamageGA);
+                    //ActionSystem.Instance.AddReaction(new DealDamageGA(attacker, attacker.Stat1, new() { target }));
+                    //ActionSystem.Instance.AddReaction(new DealDamageGA(target, attacker.Stat1, new() { attacker }));
+            });
+            seq.Append(attacker.transform.DOMove(returnPos, AnimConfig.AttackAnimTime));
+        }
+        yield return seq.WaitForCompletion();
     }
 }
