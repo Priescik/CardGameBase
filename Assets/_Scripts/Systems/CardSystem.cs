@@ -16,7 +16,7 @@ public class CardSystem : Singleton<CardSystem>
     List<CardInstance> _hand = new();
 
     // TODO differentiate players!!!
-    Side _side = Side.A;
+    Side _side_TODO = Side.A;
 
     void OnEnable()
     {
@@ -77,7 +77,7 @@ public class CardSystem : Singleton<CardSystem>
         }
         foreach (var effectWrapper in playCardGA.CardInstance.AutoTargetEffects)
         {
-            PerformCardAutoTargetEffectGA performEffectGA = new(playCardGA.CardInstance, effectWrapper.Effect, effectWrapper.TargetMode, _side);
+            PerformCardAutoTargetEffectGA performEffectGA = new(playCardGA.CardInstance, effectWrapper.Effect, effectWrapper.TargetMode, _side_TODO);
             ActionSystem.Instance.AddReaction(performEffectGA);
             // Use Reaction here, because another performer is already running (PlayCardGA)
         }

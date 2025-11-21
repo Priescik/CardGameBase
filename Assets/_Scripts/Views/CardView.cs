@@ -58,7 +58,7 @@ public class CardView : MonoBehaviour
         if (CardInstance.UsesManualTarget)
         {
             TargetingSystem.Instance.StartTargeting(transform.position);
-            HighlightingSystem.Instance.TurnOnPossibleTargets(CardInstance.ManualTargetEffect);
+            HighlightingSystem.Instance.TurnOnValidTargets(CardInstance.ManualTargetEffect);
         }
         else
         {
@@ -81,7 +81,7 @@ public class CardView : MonoBehaviour
         {
             // this ensures that anything under mouse is turned back to basic highlight
             // TODO store changed highlight and revert this one only
-            HighlightingSystem.Instance.TurnOnPossibleTargets(CardInstance.ManualTargetEffect); 
+            HighlightingSystem.Instance.TurnOnValidTargets(CardInstance.ManualTargetEffect); 
             EntityView target = TargetingSystem.Instance.GetTarget(MouseRaycastSystem.Instance.GetMouseOnPlane());
             if (target != null)
             {
@@ -105,7 +105,7 @@ public class CardView : MonoBehaviour
             HighlightingSystem.Instance.TurnOffAll();
             if (!ManaSystem.Instance.HasEnoughMana(CardInstance.Cost))
             {
-                Debug.Log("Not enough Mana!"); // TODO game view cue
+                Debug.Log("Not enough Mana!"); // TODO visual cue
                 return;
             }
             EntityView target = TargetingSystem.Instance.EndTargeting(MouseRaycastSystem.Instance.GetMouseOnPlane());

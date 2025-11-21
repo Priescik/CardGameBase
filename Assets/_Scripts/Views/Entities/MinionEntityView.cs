@@ -9,6 +9,9 @@ public class MinionEntityView : EntityView, IDamagable
     [SerializeField] TMP_Text _statText_3;
     int _currentHealth;
     CardInstance _cardInstance;
+    public int Stat1 => _cardInstance.Stat1;
+    public int Stat2 => _cardInstance.Stat2;
+    public int Stat3 => _cardInstance.Stat3;
     //Dict<string, int> _intStats;
     //public int GetIntStat(string name) {  return _intStats[name]; }
 
@@ -49,6 +52,31 @@ public class MinionEntityView : EntityView, IDamagable
         //if (!Interactions.Instance.PlayerCanHover()) return;
         CardViewHoverSystem.Instance.HideEntity();
     }
+    public void OnMouseDown()
+    {
+        if (!Interactions.Instance.PlayerCanInteract()) return;
+
+        TargetingSystem.Instance.StartTargeting(transform.position);
+        HighlightingSystem.Instance.TurnOnValidCombatTargets(Side);
+
+
+    }
+    //void OnMouseDrag()
+    //{
+    //    if (!Interactions.Instance.PlayerCanInteract()) return;
+    //    EntityView target = TargetingSystem.Instance.GetTarget(MouseRaycastSystem.Instance.GetMouseOnPlane());
+    //}
+    public void OnMouseUp()
+    {
+        if (!Interactions.Instance.PlayerCanInteract()) return;
+        HighlightingSystem.Instance.TurnOffAll();
+        EntityView target = TargetingSystem.Instance.EndTargeting(MouseRaycastSystem.Instance.GetMouseOnPlane());
+        if (target != null && target.Side != Side) // TODO implement parametric target validation, eg. positioning/friendly targets/etc
+        {
+            AttackGA attackGA = new(this, target);
+            ActionSystem.Instance.Perform(attackGA);
+        }
+    }
 
     public void ApplyStatChanges(int stat1Change, int stat2Change, int stat3Change)
     {
@@ -68,7 +96,6 @@ public class MinionEntityView : EntityView, IDamagable
         RefreshView();
         return _currentHealth <= 0;
     }
-
 
 
     void OnDestroy()

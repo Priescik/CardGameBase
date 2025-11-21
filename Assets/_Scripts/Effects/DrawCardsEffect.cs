@@ -8,7 +8,7 @@ public class DrawCardsEffect : Effect
 
     public override GameAction GetGameAction(CardInstance cardSource, EntityView entitySource, List<EntityView> targets)
     {
-        // TODO source.controller
+        // TODO target player
         DrawCardsGA drawCardsGA = new(_drawAmount);
         return drawCardsGA;
     }
