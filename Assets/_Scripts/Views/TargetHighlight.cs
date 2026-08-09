@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class TargetHighlight : MonoBehaviour
 {
-    Color _startColor;
     [SerializeField] Renderer _renderer;
+    public Color MouseoverColor;
+    public Color PassiveColor;
 
     void OnStart()
     {
@@ -11,11 +12,11 @@ public class TargetHighlight : MonoBehaviour
             HighlightingSystem.Instance.Register(this);
     }
 
-    void OnEnable()
-    {
+    //void OnEnable()
+    //{
         ////if (HighlightingSystem.Instance != null)
         //    HighlightingSystem.Instance.Register(this);
-    }
+    //}
 
     void OnDisable()
     {
@@ -24,28 +25,35 @@ public class TargetHighlight : MonoBehaviour
     }
 
 
-    public void TurnOn(Color? color = null)
+    public void TurnOn(Color color)
     {
-        _startColor = _renderer.material.color; // TODO fix: multiple color saves my overlap resulting in visual bug - highlight will stay on
-        Color targetColor = color ?? Color.white;
-        targetColor.a = 1f;
-        _renderer.material.color = targetColor;
+        _renderer.enabled = true;
+        _renderer.material.color = color ;
     }
-
+    public void TurnOn()
+    {
+        _renderer.enabled = true;
+        _renderer.material.color = VisualsConfig.DefaultHighlight;
+    }
+   
     public void TurnOff()
     {
-        _renderer.material.color = _startColor;
+        _renderer.enabled = false;
     }
 
-    //void OnMouseEnter()
-    //{
-    //    _startcolor = _renderer.material.color;
-    //    _renderer.material.color = Color.yellow;
-    //}
+    void OnMouseEnter()
+    {
+        if (MouseoverColor != null)
+        {
+            TurnOn(MouseoverColor);
+        }
+    }
 
-    //void OnMouseExit()
-    //{
-    //    // watch out for cases when OnMouseExit might not be called
-    //    _renderer.material.color = _startcolor;
-    //}
+    void OnMouseExit()
+    {
+        if (MouseoverColor != null)
+        {
+            TurnOn(PassiveColor);
+        }
+    }
 }

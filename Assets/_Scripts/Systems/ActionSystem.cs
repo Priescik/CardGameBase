@@ -13,6 +13,12 @@ public class ActionSystem : Singleton<ActionSystem>
     static Dictionary<Type, List<Action<GameAction>>> postSubs = new();
     static Dictionary<Type, Func<GameAction, IEnumerator>> performers = new();
 
+    // events for potential Action Logger
+    public event Action<GameAction> ActionStarted;
+    //public event Action<GameAction> EnterPre;
+    public event Action<GameAction> EnterPost;
+    public event Action<GameAction> ActionFinished;
+
     public void Perform(GameAction action, System.Action OnPerformFinished = null)
     {
         // A serie of Perform() calls may be not executed, unless chained with OnPerformFinished
@@ -36,7 +42,8 @@ public class ActionSystem : Singleton<ActionSystem>
 
     IEnumerator Flow(GameAction action, Action OnFlowFinished = null)
     {
-        _reactions = action.PreReactions;
+        ActionStarted?.Invoke(action); // Logger
+        _reactions = action.PreReactions;   
         PerformSubscribers(action, preSubs);
         yield return PerformReactions();
 
@@ -44,10 +51,12 @@ public class ActionSystem : Singleton<ActionSystem>
         yield return PerformPerformer(action);
         yield return PerformReactions();
 
+        EnterPost?.Invoke(action); // Logger
         _reactions = action.PostReactions;
         PerformSubscribers(action, postSubs);
         yield return PerformReactions();
 
+        ActionFinished?.Invoke(action); // Logger
         OnFlowFinished?.Invoke();
     }
 
@@ -121,6 +130,20 @@ public class ActionSystem : Singleton<ActionSystem>
             subs[typeof(T)].Remove(wrappedReaction);
         }
     }
+    public void PerformSequence(GameAction[] actions)
+    {
+        int index = 0;
 
+        void PerformNext()
+        {
+            if (index >= actions.Length)
+            {
+                return;
+            }
+            Perform(actions[index++], PerformNext);
+        }
+
+        PerformNext();
+    }
 }
 

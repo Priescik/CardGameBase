@@ -18,28 +18,52 @@ public class HighlightingSystem : Singleton<HighlightingSystem>
 
     public void TurnOnValidCombatTargets(Side side)
     {
-        foreach (TargetHighlight h in _highlights)
-            h.TurnOn(); // TODO filter
+        foreach (EntityView entity in EntitySystem.Instance.All)
+        {
+            if (entity.TryGetComponent<TargetHighlight>(out TargetHighlight highlight))
+            {
+                if (entity.Side != side && EntityTargetTypeMapper.IsAssignable(entity.GetType(), EntityTargetType.MinionOrPlayer))
+                {
+                    highlight.PassiveColor = VisualsConfig.ValidTargetHighlight;
+                    highlight.MouseoverColor = VisualsConfig.MouseTargetHighlight;
+                    highlight.TurnOn();
+                }
+            }
+        }
     }
 
     public void TurnOnValidTargets(ManualTargetEffect effect)
     {
-        foreach (TargetHighlight h in _highlights)
-            h.TurnOn(); // TODO filter
-    }
-
-    public void TurnOnMouseTarget(EntityView entity, bool isValid)
-    {
-        if (entity.TryGetComponent<TargetHighlight>(out TargetHighlight targetHighlight))
+        foreach (EntityView entity in EntitySystem.Instance.All)
         {
-            Color color = isValid ? Color.green : Color.red;
-            targetHighlight.TurnOn(color);
+            if (entity.TryGetComponent<TargetHighlight>(out TargetHighlight highlight))
+            {
+                if (effect.IsValidTarget(entity))
+                {
+                    highlight.PassiveColor = VisualsConfig.ValidTargetHighlight;
+                    highlight.MouseoverColor = VisualsConfig.MouseTargetHighlight;
+                    highlight.TurnOn();
+                }
+            }
         }
     }
+
+    //public void TurnOnMouseTarget(EntityView entity, bool isValid)
+    //{
+    //    if (entity.TryGetComponent<TargetHighlight>(out TargetHighlight targetHighlight))
+    //    {
+    //        Color color = isValid ? VisualsConfig.MouseTargetHighlight : VisualsConfig.InvalidMouseTargetHighlight;
+    //        targetHighlight.TurnOn(color);
+    //    }
+    //}
 
     public void TurnOffAll()
     {
         foreach (TargetHighlight h in _highlights)
+        {
             h.TurnOff();
+            h.PassiveColor = VisualsConfig.DefaultHighlight;
+            h.MouseoverColor = VisualsConfig.DefaultHighlight;
+        }
     }
 }

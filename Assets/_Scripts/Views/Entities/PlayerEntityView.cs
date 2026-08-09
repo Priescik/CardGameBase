@@ -4,13 +4,15 @@ using System.Collections.Generic;
 
 public class PlayerEntityView : EntityView, IDamagable
 {
+    public Player Player { get; private set; }
     [SerializeField] TMP_Text _healthText;
     int _currentHealth;
     
-    public override void Setup(CardInstance cardInstance, Side side)
+    public override void Setup(CardInstance cardInstance, Player player) //, Side side)
     {
-        Side = side;
-        _spriteRenderer.sprite = cardInstance.Image;
+        Player = player;
+        Owner = player;
+        //_spriteRenderer.sprite = cardInstance.Image;
         RefreshView();
     }
 

@@ -18,7 +18,6 @@ public class TargetMode
     //[field: SerializeReference, SR] TargetCondition[] _conditions;
     public List<EntityView> GetTargets(Side sourceSide)
     {
-        Debug.Log("getTargets was called");
         List<EntityView> output = new();
         if (!_use) return output;
 

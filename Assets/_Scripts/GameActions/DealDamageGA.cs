@@ -10,6 +10,6 @@ public class DealDamageGA : GameAction, IHasEntitySource, IHasTargets
     {
         Amount = amount;
         Targets = new(targets);
-        EntitySource = source;
+        EntitySource = source; // TODO spell can deal damage too, handle that - probably just respond to null
     }
 }

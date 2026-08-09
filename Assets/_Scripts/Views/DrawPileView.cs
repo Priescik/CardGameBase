@@ -10,7 +10,7 @@ public class DrawPileView : MonoBehaviour
     {
         //if (!Interactions.Instance.PlayerCanHover()) return;
         _drawPileTooltip.SetActive(true);
-        _drawPileCountText.text = CardSystem.Instance.DrawPileCount.ToString();
+        _drawPileCountText.text = "this class has no info about the player yet";//CardSystem.Instance.DrawPileCount.ToString();
     }
     public void OnMouseExit()
     {

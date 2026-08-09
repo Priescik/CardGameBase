@@ -41,13 +41,12 @@ public class EntitySystem : Singleton<EntitySystem>
         EntityView target = createEntityGA.TargetEntity;
         if (!target)
         {
-            Debug.Log("Create entity action fizzled (pecefully), cause: no target");
+            Debug.Log("Create entity action fizzled (peacefully), cause: no target");
             yield break;
         }
         var newEntity = Instantiate(_minionEntityViewPrefab, target.transform.position, target.transform.rotation); // TODO generalize and automate prefab selection
-        newEntity.Setup(createEntityGA.CardInstance, target.Side);
-
-        createEntityGA.TargetEntity = newEntity;
+        newEntity.Setup(createEntityGA.CardInstance, target.Owner);
+        createEntityGA.TargetEntity = newEntity; // this is needed for Reactions to treat the new entity as the target instead of the empty one
 
         int index = _entities.IndexOf(target);
         if (index != -1)
@@ -60,23 +59,31 @@ public class EntitySystem : Singleton<EntitySystem>
             Debug.LogWarning($"Entity {target} was not found in EntitySystem._entities");
         }
         target.gameObject.SetActive(false);
-        Debug.Log("Entity Created");
         yield return null;
     }
 
-    public void InitializeEmptyEntities()
+    public void AddPlayersEntities(List<PlayerEntityView> players)
+    {
+        foreach (var player in players)
+        {
+            _entities.Add(player);
+        }
+    }
+
+    public void InitializeEmptyEntities(Player player1, Player player2)
     {
         (List<Vector3> sideA, List<Vector3> sideB) = _boardFieldsGizmo.GetFieldPositions();
         foreach (Vector3 pos in sideA)
         {
             EntityView newEntity = Instantiate(_emptyEntityViewPrefab, pos, Quaternion.Euler(90,0,0));
-            newEntity.Setup(null, Side.A);
+            //newEntity.Setup(null, Side.A);
+            newEntity.Setup(null, player1);
             _entities.Add(newEntity);
         }
         foreach (Vector3 pos in sideB)
         {
             EntityView newEntity = Instantiate(_emptyEntityViewPrefab, pos, Quaternion.Euler(90, 0, 0));
-            newEntity.Setup(null, Side.B);
+            newEntity.Setup(null, player2);
             _entities.Add(newEntity);
         }
     }
@@ -139,33 +146,40 @@ public class EntitySystem : Singleton<EntitySystem>
     IEnumerator AttackPerformer(AttackGA attackGA)
     {
         if (!(attackGA.EntitySource is MinionEntityView attacker)) yield break;
-        Vector3 returnPos = attacker.transform.position;
-        Quaternion returnRot = attacker.transform.rotation;
-        var seq = DOTween.Sequence();
+
         foreach (EntityView target in attackGA.Targets)
         {
-            // TODO consider delegating this movement to wrapper
-            seq.Append(
-                attacker.transform.DOMove(
-                    Vector3.Lerp(returnPos, target.transform.position, 0.9f),
-                    AnimConfig.AttackAnimTime
-                )
-            );
-            seq.AppendCallback(() =>
+            DealDamageGA dealDamageGA = new(attacker, attacker.Stat1, new() { target });
+            ActionSystem.Instance.AddReaction(dealDamageGA);
+            // TODO instead of Minion check, Interface might be reqired
+            if (target is MinionEntityView minionTarget)
             {
-                DealDamageGA dealDamageGA = new(attacker, attacker.Stat1, new() { target });
-                ActionSystem.Instance.AddReaction(dealDamageGA);
-                // TODO this isn't sensitive to to tagets that dont deal dmg (eg. players), Interface may me needed
-                if (target is MinionEntityView minionTarget) 
-                { 
-                    DealDamageGA returnDamageGA = new(target, minionTarget.Stat1, new() { attacker }); 
-                    ActionSystem.Instance.AddReaction(returnDamageGA);
-                }
-                    //ActionSystem.Instance.AddReaction(new DealDamageGA(attacker, attacker.Stat1, new() { target }));
-                    //ActionSystem.Instance.AddReaction(new DealDamageGA(target, attacker.Stat1, new() { attacker }));
-            });
-            seq.Append(attacker.transform.DOMove(returnPos, AnimConfig.AttackAnimTime));
+                DealDamageGA returnDamageGA = new(target, minionTarget.Stat1, new() { attacker });
+                ActionSystem.Instance.AddReaction(returnDamageGA);
+            }
         }
-        yield return seq.WaitForCompletion();
+        yield break;
+        // OLD ANIMATION
+        //var seq = DOTween.Sequence();
+        //foreach (EntityView target in attackGA.Targets)
+        //{
+        //    Vector3 returnPos = attacker.transform.position;
+        //    Quaternion returnRot = attacker.transform.rotation;
+        //    // TODO move wrapper instead of whole object
+        //    seq.Append(
+        //        attacker.transform.DOMove(
+        //            Vector3.Lerp(returnPos, target.transform.position, 0.9f),
+        //            VisualsConfig.AttackAnimTime
+        //        )
+        //    );
+        //    // TODO seq.Join(attacker.transform.DORotate())
+        //    seq.AppendCallback(() =>
+        //    {
+        //            //ActionSystem.Instance.AddReaction(new DealDamageGA(attacker, attacker.Stat1, new() { target }));
+        //            //ActionSystem.Instance.AddReaction(new DealDamageGA(target, attacker.Stat1, new() { attacker }));
+        //    });
+        //    seq.Append(attacker.transform.DOMove(returnPos, VisualsConfig.AttackAnimTime));
+        //}
+        //yield return seq.WaitForCompletion();
     }
 }

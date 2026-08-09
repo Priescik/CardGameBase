@@ -1,9 +1,7 @@
-using Codice.Client.BaseCommands.Merge.Restorer;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using static Codice.CM.Common.CmCallContext;
 
 [CustomPropertyDrawer(typeof(EffectCondition))]
 public class ConditionDrawer : PropertyDrawer
@@ -17,8 +15,14 @@ public class ConditionDrawer : PropertyDrawer
 
         var obj = property.managedReferenceValue;
         if (obj != null)
+        {
             label = new GUIContent(obj.GetType().Name);
-
+        }
+        else
+        {
+            EditorGUI.EndProperty(); 
+            return;
+        }
 
         Rect contentRect = EditorGUI.PrefixLabel(
             position,
@@ -29,7 +33,10 @@ public class ConditionDrawer : PropertyDrawer
         //EditorGUI.indentLevel = 0;
 
         SerializedProperty invertProp = property.FindPropertyRelative("InvertCheck");
-        EditorGUI.PropertyField(contentRect, invertProp, new GUIContent(invertProp.displayName));
+        if (invertProp != null)
+        {
+            EditorGUI.PropertyField(contentRect, invertProp, new GUIContent(invertProp.displayName));
+        }
 
         EditorGUI.EndProperty();
     }

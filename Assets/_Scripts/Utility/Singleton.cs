@@ -23,7 +23,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 }
 
-public abstract class PresistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
 {
     protected override void Awake()
     {

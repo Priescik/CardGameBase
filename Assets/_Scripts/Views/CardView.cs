@@ -79,36 +79,37 @@ public class CardView : MonoBehaviour
         if (!Interactions.Instance.PlayerCanInteract()) return;
         if (CardInstance.UsesManualTarget)
         {
-            // this ensures that anything under mouse is turned back to basic highlight
             // TODO store changed highlight and revert this one only
-            HighlightingSystem.Instance.TurnOnValidTargets(CardInstance.ManualTargetEffect); 
-            EntityView target = TargetingSystem.Instance.GetTarget(MouseRaycastSystem.Instance.GetMouseOnPlane());
-            if (target != null)
-            {
-                HighlightingSystem.Instance.TurnOnMouseTarget(target, CardInstance.ManualTargetEffect.IsValidTarget(target));
-            }
+            //EntityView target = TargetingSystem.Instance.GetTarget(MouseRaycastSystem.Instance.GetMouseOnPlane());
+            //if (target != null)
+            //{
+            //    HighlightingSystem.Instance.TurnOnMouseTarget(target, CardInstance.ManualTargetEffect.IsValidTarget(target));
+            //}
         }
         else
         {
-            transform.position = MouseRaycastSystem.Instance.GetMouseOnPlane();
+            transform.position = MouseRaycastSystem.Instance.GetMouseOnPlane() + Vector3.up * VisualsConfig.CardDragHeight;
         }
     }
 
     void OnMouseUp()
     {
-        if (!Interactions.Instance.PlayerCanInteract()) return;
-
-        //LayerMask rayLayer = CardInstance.RequiresTargetEntity() ? _basicDropLayerMask : _targetedDropLayerMask;
 
         if (CardInstance.UsesManualTarget)
         {
             HighlightingSystem.Instance.TurnOffAll();
-            if (!ManaSystem.Instance.HasEnoughMana(CardInstance.Cost))
+        }
+
+        if (!Interactions.Instance.PlayerCanInteract()) return;
+
+        if (CardInstance.UsesManualTarget)
+        {
+            EntityView target = TargetingSystem.Instance.EndTargeting(MouseRaycastSystem.Instance.GetMouseOnPlane());
+            if (!CardInstance.Owner.Mana.HasEnough(CardInstance.Cost))
             {
                 Debug.Log("Not enough Mana!"); // TODO visual cue
                 return;
             }
-            EntityView target = TargetingSystem.Instance.EndTargeting(MouseRaycastSystem.Instance.GetMouseOnPlane());
             if (target != null && CardInstance.ManualTargetEffect.IsValidTarget(target))
             {
                 PlayCardGA playCardGA = new(CardInstance, target);
@@ -116,37 +117,30 @@ public class CardView : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Wrong target. Correct target is/are: {CardInstance.ManualTargetEffect.GetValidType}");
+                Debug.Log($"Wrong target. Correct target is/are: {CardInstance.ManualTargetEffect.GetValidType}. What was hit: {target}");
                 return;
             }
         }
         else
         {
-            //TODO move this to drag so that visual cue of playability can be displayed (eg. glow)
-            if (ManaSystem.Instance.HasEnoughMana(CardInstance.Cost)
-                && Physics.Raycast(transform.position, -Vector3.up, out RaycastHit hit, 10f, _basicDropLayerMask))
+            if (CardInstance.Owner.Mana.HasEnough(CardInstance.Cost))
             {
-                //if (CardInstance.RequiresTargetEntity() && false) {
-                //    if (hit.rigidbody.gameObject.TryGetComponent<EntityView>(out EntityView targetEntityView)) {// play card
-                //    }else {// return card
-                //    }
-                //}
-                //else
+                if (Physics.Raycast(transform.position, -Vector3.up, out RaycastHit hit, 100f, _basicDropLayerMask))
                 {
                     PlayCardGA playCardGA = new(CardInstance);
                     ActionSystem.Instance.Perform(playCardGA);
-                }
-            }
-            else
-            {
-                if (ManaSystem.Instance.HasEnoughMana(CardInstance.Cost)){
-                    Debug.Log("Not enough Mana!");
                 }
                 else
                 {
                     // Vulnerability: this functionality depends heavily on relation of DragPlane and DropArea positions
                     Debug.Log("In case you missed card drop plane - check if DragPlane and DropArea are positioned correctly in relation to each other");
+                    transform.position = _dragStartPosition;
+                    transform.rotation = _dragStartRotation;
                 }
+            }
+            else
+            {
+                Debug.Log("Not enough Mana!");
                 transform.position = _dragStartPosition;
                 transform.rotation = _dragStartRotation;
             }

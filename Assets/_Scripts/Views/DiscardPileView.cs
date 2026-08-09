@@ -10,7 +10,7 @@ public class DiscardPileView : MonoBehaviour
     {
         //if (!Interactions.Instance.PlayerCanHover()) return;
         _discardPileTooltip.SetActive(true);
-        _discardPileCountText.text = CardSystem.Instance.DiscardPileCount.ToString();
+        _discardPileCountText.text = "this class has no info about the player yet";//CardSystem.Instance.DiscardPileCount.ToString();
     }
     public void OnMouseExit()
     {

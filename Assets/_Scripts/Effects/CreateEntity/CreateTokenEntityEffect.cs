@@ -18,8 +18,9 @@ public class CreateTokenEntityEffect : CreateEntityEffect
 
     public override GameAction GetGameAction(CardInstance cardSource, EntityView entitySource, List<EntityView> targets)
     {
-        CardInstance cardInstance = new CardInstance(_token);
-        CreateEntityGA createEntityGA = new(cardInstance, targets.FirstOrDefault());
+        EntityView target = targets.First();
+        CardInstance cardInstance = new CardInstance(_token, MatchSetupSystem.Instance.GetPlayerBySide(target.Side));
+        CreateEntityGA createEntityGA = new(cardInstance, target);
         return createEntityGA;
     }
 }

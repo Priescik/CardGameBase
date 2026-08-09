@@ -26,11 +26,11 @@ MonoBehaviour:
   - <Effect>k__BackingField:
       rid: 9200962457271271587
     _targetMode:
-      _use: 0
-      _filterSide: 0
-      _side: 2
-      _filterType: 0
-      _type: 0
+      _use: 1
+      _filterSide: 1
+      _side: 4
+      _filterType: 1
+      _type: 1
       _random: 0
       _randomCount: 1
       _otherConditions: 0

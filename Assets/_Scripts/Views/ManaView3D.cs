@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ManaView : MonoBehaviour
+public class ManaView3D : MonoBehaviour
 {
     // Random Spawning could be fixed to circular instead of square
 

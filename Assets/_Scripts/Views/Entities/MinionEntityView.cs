@@ -1,9 +1,12 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class MinionEntityView : EntityView, IDamagable
 {
+    //public Player Owner { get; private set; }
+    //public Side Side => Owner.Side;
     [SerializeField] TMP_Text _statText_1;
     [SerializeField] TMP_Text _statText_2;
     [SerializeField] TMP_Text _statText_3;
@@ -17,9 +20,9 @@ public class MinionEntityView : EntityView, IDamagable
 
     List<PassiveSkillModel> _passives;
 
-    public override void Setup(CardInstance cardInstance, Side side)
+    public override void Setup(CardInstance cardInstance, Player ownerPlayer)
     {
-        Side = side;
+        Owner = ownerPlayer;
         _cardInstance = cardInstance;
         _passives = new();
         foreach (PassiveSkillData skillData in _cardInstance.PassivesData)
@@ -90,11 +93,19 @@ public class MinionEntityView : EntityView, IDamagable
     public bool TakeDamage(int amount)
     {
         ///
-        /// Returns bool if damage was fatal
+        /// Returns bool if damage was lethal
         /// 
         _currentHealth -= amount;
         RefreshView();
-        return _currentHealth <= 0;
+        bool lethal = _currentHealth <= 0;
+
+        var seq = DOTween.Sequence();
+        seq.Append(_statText_3.DOColor(VisualsConfig.DmgFlashColor, VisualsConfig.DmgFlashTime));
+        if (!lethal)
+        {
+            seq.Append(_statText_3.DOColor(Color.white, VisualsConfig.DmgFlashTime));
+        }
+        return lethal;
     }
 
 
@@ -105,6 +116,6 @@ public class MinionEntityView : EntityView, IDamagable
            // TODO test if they unsub correctly
             skill.OnRemove();
         }
-        CardViewHoverSystem.Instance.HideEntity(); // TODO only if this entity is being shown
+        CardViewHoverSystem.Instance?.HideEntity(); // TODO only if this entity is being shown
     }
 }

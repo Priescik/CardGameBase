@@ -11,9 +11,11 @@ As said tutorial is designed specifically for single-player asymetrical roguelik
 - [DOTween](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
 
 # Features:
+## Category : Gameplay
+No groundbreaking gameplay features yet, mostly basic card game functionality
 ## Category : Editor
 ### Battlefield placement gizmo
-Allows quick changes to battlefield layout, using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
+Allows quick changes to battlefield layout. Using Editor only you can change the number of fields and whether you want horizontal or vertical split between players.
 
 ![BFgizmo2](https://github.com/user-attachments/assets/ad4220bd-037e-4e53-a178-29a9c214ecb4)
 

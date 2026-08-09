@@ -20,7 +20,7 @@ public class TargetingSystem : Singleton<TargetingSystem>
     /// <returns></returns>
     public EntityView GetTarget(Vector3 endPosition)
     {
-        if (Physics.Raycast(endPosition, Vector3.down, out RaycastHit hit, 10f, _targetLayerMask)
+        if (Physics.Raycast(endPosition, Vector3.down, out RaycastHit hit, 100f, _targetLayerMask)
             && hit.collider != null
             && hit.transform.TryGetComponent(out EntityView entityView))
         {

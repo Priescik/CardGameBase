@@ -17,14 +17,16 @@ public class CardInstance
     public int Stat1 {get; set;} 
     public int Stat2 { get; set;} 
     public int Stat3 { get; set; }
+    public Player Owner {get; set;}
 
-    public CardInstance(CardTemplate cardTemplate)
+    public CardInstance(CardTemplate cardTemplate, Player ownerPlayer)
     {
         _cardTemplate = cardTemplate;
         Cost = cardTemplate.Cost;
         Stat1 = cardTemplate.Stat1;
         Stat2 = cardTemplate.Stat2;
         Stat3 = cardTemplate.Stat3;
+        Owner = ownerPlayer;
     }
 
     public bool UsesManualTarget => this.ManualTargetEffect != null;
