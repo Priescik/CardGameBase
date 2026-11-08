@@ -13,7 +13,6 @@ public class ActionSystem : Singleton<ActionSystem>
     static Dictionary<Type, List<Action<GameAction>>> postSubs = new();
     static Dictionary<Type, Func<GameAction, IEnumerator>> performers = new();
 
-    // events for potential Action Logger
     public event Action<GameAction> ActionStarted;
     //public event Action<GameAction> EnterPre;
     public event Action<GameAction> EnterPost;

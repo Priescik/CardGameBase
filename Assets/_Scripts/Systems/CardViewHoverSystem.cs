@@ -5,13 +5,20 @@ public class CardViewHoverSystem : Singleton<CardViewHoverSystem>
     [SerializeField] CardView _cardViewHover;
     [SerializeField] CardView _entityCardViewHover;
 
+    void Start()
+    {
+        Debug.Log(CardViewCreator.Instance);
+        _cardViewHover.SetFormatter(CardViewCreator.Instance.CostFormatter);
+        _entityCardViewHover.SetFormatter(CardViewCreator.Instance.CostFormatter);
+    }
+
     #region Card
     public void Show(CardInstance cardInstance, Transform basePos)
     {
         Quaternion rot = Quaternion.Euler(basePos.localEulerAngles.x, 0f, 0f);
         Vector3 pos = basePos.position + rot * (Vector3.up * 6 + Vector3.back * 0.2f);
         _cardViewHover.gameObject.SetActive(true);
-        _cardViewHover.Setup(cardInstance);
+        _cardViewHover.Refresh(cardInstance);
         _cardViewHover.transform.position = pos;
         _cardViewHover.transform.rotation = rot;
     }
@@ -26,7 +33,7 @@ public class CardViewHoverSystem : Singleton<CardViewHoverSystem>
     public void ShowEntity(CardInstance cardInstance)
     {
         _entityCardViewHover.gameObject.SetActive(true);
-        _entityCardViewHover.Setup(cardInstance);
+        _entityCardViewHover.Refresh(cardInstance);
     }
     public void HideEntity()
     {

@@ -14,7 +14,7 @@ public class Player
     public int DiscardPileCount => DiscardPile.Count;
     public int DrawPileCount => DrawPile.Count;
     public int HandCount => Hand.Count;
-    public Mana Mana { get; private set; }
+    public IntegerMana Mana { get; private set; }
 
     public Side Side { get; private set; }
     public string Name => Side == Side.A ? "Player 1" : "Player 2"; // debug purposes for now
@@ -25,7 +25,8 @@ public class Player
         PlayerEntityView playerEntityView, 
         HandView handView,
         DiscardPileView discardPileView,
-        DrawPileView drawPileView)
+        DrawPileView drawPileView,
+        IntegerMana mana)
     {
         Side = side;
         SetDrawPile(deckData);
@@ -34,11 +35,12 @@ public class Player
         DiscardPilePoint = discardPileView.transform;
         DrawPilePoint = drawPileView.transform;
 
-        Mana = new Mana(GameplayConfig.StartingMana); // TODO move
+        Mana = mana;
     }
 
     private void SetDrawPile(List<CardTemplate> deckData)
     {
+        Debug.Log("Creating deck for player: " + this);
         foreach (CardTemplate cardTemplate in deckData)
         {
             CardInstance cardInstance = new(cardTemplate, this);

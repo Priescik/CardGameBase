@@ -7,6 +7,7 @@ public class HighlightingSystem : Singleton<HighlightingSystem>
 
     public void Register(TargetHighlight highlight)
     {
+        Debug.Log("Adding highlight");
         if (!_highlights.Contains(highlight))
             _highlights.Add(highlight);
     }

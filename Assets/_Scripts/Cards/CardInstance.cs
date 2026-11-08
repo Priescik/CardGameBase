@@ -13,7 +13,7 @@ public class CardInstance
     public List<AutoTargetEffect> AutoTargetEffects => _cardTemplate.AutoTargetEffects;
     public List<PassiveSkillData> PassivesData => _cardTemplate.PassivesData;
     // can be changed
-    public int Cost {get; set;} 
+    public ResourceAmount Cost {get; set;} 
     public int Stat1 {get; set;} 
     public int Stat2 { get; set;} 
     public int Stat3 { get; set; }
@@ -22,7 +22,7 @@ public class CardInstance
     public CardInstance(CardTemplate cardTemplate, Player ownerPlayer)
     {
         _cardTemplate = cardTemplate;
-        Cost = cardTemplate.Cost;
+        Cost = cardTemplate.ManaCost;
         Stat1 = cardTemplate.Stat1;
         Stat2 = cardTemplate.Stat2;
         Stat3 = cardTemplate.Stat3;

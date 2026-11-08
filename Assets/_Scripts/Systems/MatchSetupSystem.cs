@@ -12,7 +12,7 @@ public class MatchSetupSystem : Singleton<MatchSetupSystem>
     [SerializeField] HandView _handView;
     [SerializeField] DiscardPileView _discardPileView;
     [SerializeField] DrawPileView _drawPileView;
-    [SerializeField] ManaView _manaView;
+    [SerializeField] IntegerManaView _manaView;
     // PLAYER 2
     //[SerializeField] List<CardTemplate> _deckData2;
     [Header("Player 2 views")]
@@ -20,14 +20,20 @@ public class MatchSetupSystem : Singleton<MatchSetupSystem>
     [SerializeField] HandView _handView2;
     [SerializeField] DiscardPileView _discardPileView2;
     [SerializeField] DrawPileView _drawPileView2;
-    [SerializeField] ManaView _manaView2;
+    [SerializeField] IntegerManaView _manaView2;
     Player player1;
     Player player2;
+    [Header("Mana")]
+    [SerializeField] ResourceAmount _startingManaAmount;
 
     void Start()
     {
-        player1 = new Player(Side.A, _deckData, _playerEntityView, _handView, _discardPileView, _drawPileView); // TODO Bind views
-        player2 = new Player(Side.B, _deckData, _playerEntityView2, _handView2, _discardPileView2, _drawPileView2);
+        player1 = new Player(Side.A, _deckData, _playerEntityView, 
+            _handView, _discardPileView, _drawPileView, 
+            new IntegerMana((IntegerManaAmount)GameplayConfig.StartingManaAmount)); // TODO Bind views
+        player2 = new Player(Side.B, _deckData, _playerEntityView2, 
+            _handView2, _discardPileView2, _drawPileView2, 
+            new IntegerMana((IntegerManaAmount)GameplayConfig.StartingManaAmount));
         _manaView.Bind(player1.Mana);
         _manaView2.Bind(player2.Mana);
         EntitySystem.Instance.InitializeEmptyEntities(player1, player2);
@@ -50,47 +56,50 @@ public class MatchSetupSystem : Singleton<MatchSetupSystem>
         {
             new DrawCardsGA(GameplayConfig.StartingHandSize, player1),
             new DrawCardsGA(GameplayConfig.StartingHandSize, player2),
-            new IncreaseManaCapGA(GameplayConfig.StartingMana, player1),
-            new IncreaseManaCapGA(GameplayConfig.StartingMana, player2),
-            new GainManaGA(0, player1, true),
-            new GainManaGA(0, player2, true),
-        });
-    }
-    void SetupSequence2(Player player)
-    {
-        DrawCardsGA drawCardsGA = new(GameplayConfig.StartingHandSize, player);
-        ActionSystem.Instance.Perform(drawCardsGA, () =>
-        {
-            IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.StartingMana, player);
-            ActionSystem.Instance.Perform(increaseManaCapGA, () =>
-            {
-                GainManaGA gainManaGA = new(0, player, true);
-                ActionSystem.Instance.Perform(gainManaGA);
-            });
+            new IncreaseManaCapGA((IntegerManaAmount) GameplayConfig.StartingManaAmount, player1),
+            new IncreaseManaCapGA((IntegerManaAmount) GameplayConfig.StartingManaAmount, player2),
+            new GainManaGA(_startingManaAmount, player1, true),
+            new GainManaGA(_startingManaAmount, player2, true),
         });
     }
 
+    // void SetupSequence3 based on AddReaction
 
-    IEnumerator SetupSequence(Player player) /// Depreciated
-    {
-        bool done = false;
+    //void SetupSequence2(Player player)
+    //{
+    //    DrawCardsGA drawCardsGA = new(GameplayConfig.StartingHandSize, player);
+    //    ActionSystem.Instance.Perform(drawCardsGA, () =>
+    //    {
+    //        IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.StartingMana, player);
+    //        ActionSystem.Instance.Perform(increaseManaCapGA, () =>
+    //        {
+    //            GainManaGA gainManaGA = new(0, player, true);
+    //            ActionSystem.Instance.Perform(gainManaGA);
+    //        });
+    //    });
+    //}
 
-        DrawCardsGA drawCardsGA = new(GameplayConfig.StartingHandSize, player);
-        ActionSystem.Instance.Perform(drawCardsGA, () => done = true);
-        yield return new WaitUntil(() => done);
+ /// Depreciated
+    //IEnumerator SetupSequence(Player player)
+    //{
+    //    bool done = false;
 
-        done = false;
-        // This was added to run UI update, however it might
-        // become a config-based setup in the future
-        IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.StartingMana, player);
-        ActionSystem.Instance.Perform(increaseManaCapGA, () => done = true);
-        yield return new WaitUntil(() => done);
+    //    DrawCardsGA drawCardsGA = new(GameplayConfig.StartingHandSize, player);
+    //    ActionSystem.Instance.Perform(drawCardsGA, () => done = true);
+    //    yield return new WaitUntil(() => done);
 
-        done = false;
-        GainManaGA gainManaGA = new(0, player, true);
-        ActionSystem.Instance.Perform(gainManaGA, () => done = true);
-        yield return new WaitUntil(() => done);
-    }
+    //    done = false;
+    //    // This was added to run UI update, however it might
+    //    // become a config-based setup in the future
+    //    IncreaseManaCapGA increaseManaCapGA = new(GameplayConfig.StartingMana, player);
+    //    ActionSystem.Instance.Perform(increaseManaCapGA, () => done = true);
+    //    yield return new WaitUntil(() => done);
+
+    //    done = false;
+    //    GainManaGA gainManaGA = new(0, player, true);
+    //    ActionSystem.Instance.Perform(gainManaGA, () => done = true);
+    //    yield return new WaitUntil(() => done);
+    //}
 
     public Player GetPlayerBySide(Side side)
     {

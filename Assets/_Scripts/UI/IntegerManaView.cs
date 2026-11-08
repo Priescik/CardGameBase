@@ -1,12 +1,12 @@
 using UnityEngine;
 using TMPro;
 
-public class ManaView : MonoBehaviour
+public class IntegerManaView : MonoBehaviour
 {
     [SerializeField] TMP_Text _manaText;
-    Mana _mana;
+    IntegerMana _mana;
 
-    public void Bind(Mana mana)
+    public void Bind(IntegerMana mana)
     {
         Unbind();
 
@@ -24,9 +24,9 @@ public class ManaView : MonoBehaviour
         _mana = null;
     }
 
-    public void UpdateManaText(int newMana)
+    public void UpdateManaText(IntegerManaAmount newAmount)
     {
-        _manaText.text = newMana.ToString();
+        _manaText.text = newAmount.Amount.ToString();
     }
     private void OnDestroy()
     {

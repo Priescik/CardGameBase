@@ -4,6 +4,8 @@ using System.Security.Principal;
 
 public class CardView : MonoBehaviour
 {
+    IResourceAmountFormatter _costFormatter;
+
     [SerializeField] GameObject _wrapper;
     [SerializeField] TMP_Text _cardName;
     [SerializeField] TMP_Text _description;
@@ -20,12 +22,17 @@ public class CardView : MonoBehaviour
 
     Vector3 _dragStartPosition;
     Quaternion _dragStartRotation;
-    public void Setup(CardInstance cardInstance)
+    public void SetFormatter(IResourceAmountFormatter costFormatter)
+    {
+        _costFormatter = costFormatter;
+    }
+
+    public void Refresh(CardInstance cardInstance)
     {
         CardInstance = cardInstance;
         _cardName.text = cardInstance.Name;
         _description.text = cardInstance.Description;
-        _cost.text = cardInstance.Cost.ToString();
+        _cost.text = _costFormatter.Format(cardInstance.Cost);
         _stat1.text = cardInstance.Stat1.ToString();
         _stat2.text = cardInstance.Stat2.ToString();
         _stat3.text = cardInstance.Stat3.ToString();
@@ -54,7 +61,8 @@ public class CardView : MonoBehaviour
     void OnMouseDown()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
-
+        if (TurnSystem.Instance.CurrentPlayer != CardInstance.Owner) return;
+        Debug.Log("mouse down by player {" + TurnSystem.Instance.CurrentPlayer + "} on card owned by {" + CardInstance.Owner + "}");
         if (CardInstance.UsesManualTarget)
         {
             TargetingSystem.Instance.StartTargeting(transform.position);
@@ -77,6 +85,7 @@ public class CardView : MonoBehaviour
     void OnMouseDrag()
     {
         if (!Interactions.Instance.PlayerCanInteract()) return;
+        if (TurnSystem.Instance.CurrentPlayer != CardInstance.Owner) return;
         if (CardInstance.UsesManualTarget)
         {
             // TODO store changed highlight and revert this one only
@@ -94,13 +103,9 @@ public class CardView : MonoBehaviour
 
     void OnMouseUp()
     {
-
-        if (CardInstance.UsesManualTarget)
-        {
-            HighlightingSystem.Instance.TurnOffAll();
-        }
-
         if (!Interactions.Instance.PlayerCanInteract()) return;
+
+        if (TurnSystem.Instance.CurrentPlayer != CardInstance.Owner) return;
 
         if (CardInstance.UsesManualTarget)
         {
@@ -132,7 +137,7 @@ public class CardView : MonoBehaviour
                 }
                 else
                 {
-                    // Vulnerability: this functionality depends heavily on relation of DragPlane and DropArea positions
+                    // TODO fix Vulnerability: this functionality depends heavily on relation of DragPlane and DropArea positions
                     Debug.Log("In case you missed card drop plane - check if DragPlane and DropArea are positioned correctly in relation to each other");
                     transform.position = _dragStartPosition;
                     transform.rotation = _dragStartRotation;
